@@ -263,15 +263,15 @@ const CsvDisplay = () => {
         <div className="mb-4 flex gap-4">
           {/* 검색할 문자열 입력 */}
           <input
-            className="flex-grow-[1] p-2 border border-orange-200 rounded-lg focus:outline-none focus:border-orange-600"
+            className="flex-grow  text-xs md:text-base min-w-[0] py-2 border border-orange-200 rounded-lg focus:outline-none focus:border-orange-600"
             type="text"
             value={text}
             onChange={handleChange}
             placeholder="검색어를 입력하세요 ex)히어로,ㅎㅇㄹ..."
-          ></input>
+          />
           <button
             onClick={entireHandleClick}
-            className="px-4 py-2 bg-orange-400 text-white rounded-lg hover:bg-orange-600"
+            className="py-2 px-4 bg-red-400 text-sm md:text-xl text-white rounded-lg hover:bg-red-600 hover:text-black"
           >
             초기화
           </button>
@@ -290,7 +290,7 @@ const CsvDisplay = () => {
           {/* 몇개씩 보기 드롭다운 */}
           <div className="flex md:flex-[5]">
             <div className="flex-[1] md:flex-[2] mx-2 my-2">
-              <Dropdown label={listoptionsString}>
+              <Dropdown label={listoptionsString + " ⮟"}>
                 {choiceItemoptions.map((item, idx) => (
                   <DropdownItem
                     key={idx}
@@ -304,7 +304,7 @@ const CsvDisplay = () => {
 
             {/* 정렬 필터링 드롭다운 */}
             <div className="flex-[1] md:flex-[3] mx-2 my-2">
-              <Dropdown label={filteroptionsString}>
+              <Dropdown label={filteroptionsString + " ⮟"}>
                 {filterItemoptions.map((item, idx) => (
                   <DropdownItem
                     key={idx}
@@ -325,7 +325,10 @@ const CsvDisplay = () => {
                 {/* 첫 번째 데이터 객체의 키를 사용하여 테이블 헤더를 렌더링합니다. */}
                 {data[0] &&
                   Object.keys(data[0]).map((column) => (
-                    <th key={column} className="py-2 px-4 border-b">
+                    <th
+                      key={column}
+                      className="text-xs md:text-xl py-2 px-2 md:px-4 border-b"
+                    >
                       {column}
                     </th>
                   ))}
