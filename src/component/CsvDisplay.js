@@ -6,7 +6,10 @@ import Dropdown from "./Dropdown/Dropdown";
 import DropdownItem from "./Dropdown/DropdownItem";
 
 const CsvDisplay = () => {
+
   const [data, setData] = useState([]); // CSV 데이터를 저장할 상태 변수
+  const isMobile = window.matchMedia("(max-width: 768px)").matches; // 모바일로 접속 감지
+
   const options = ["2글자", "3글자", "4글자", "5글자", "6글자"]; // 체크박스 옵션
   const choiceItemoptions = ["15개씩 보기", "30개씩 보기", "50개씩 보기"];
   const filterItemoptions = [
@@ -271,7 +274,7 @@ const CsvDisplay = () => {
           />
           <button
             onClick={entireHandleClick}
-            className="py-2 px-4 bg-red-400 text-sm md:text-xl text-white rounded-lg hover:bg-red-600 hover:text-black"
+            className="py-2 px-4 bg-red-400 text-xs md:text-xl text-white rounded-lg hover:bg-red-600 hover:text-black"
           >
             초기화
           </button>
@@ -290,7 +293,7 @@ const CsvDisplay = () => {
           {/* 몇개씩 보기 드롭다운 */}
           <div className="flex md:flex-[5]">
             <div className="flex-[1] md:flex-[2] mx-2 my-2">
-              <Dropdown label={listoptionsString + " ⮟"}>
+              <Dropdown label={listoptionsString + (!isMobile?" ⮟":"")}>
                 {choiceItemoptions.map((item, idx) => (
                   <DropdownItem
                     key={idx}
@@ -304,7 +307,7 @@ const CsvDisplay = () => {
 
             {/* 정렬 필터링 드롭다운 */}
             <div className="flex-[1] md:flex-[3] mx-2 my-2">
-              <Dropdown label={filteroptionsString + " ⮟"}>
+              <Dropdown label={filteroptionsString + (!isMobile?" ⮟":"")}>
                 {filterItemoptions.map((item, idx) => (
                   <DropdownItem
                     key={idx}

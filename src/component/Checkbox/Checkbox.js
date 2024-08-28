@@ -18,7 +18,7 @@ function Checkbox({ options, checkedItems, onChange }) {
   }, [checkedItems, onChange]);
 
   return (
-    <div className="flex flex-wrap gap-4">
+    <div className="flex flex-wrap gap-2 md:gap-4">
       {options.map((option) => (
         <label key={option} className="flex items-center space-x-1 md:space-x-6">
           <input
