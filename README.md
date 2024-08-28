@@ -1,70 +1,80 @@
-# Getting Started with Create React App
+# 🍄 뉴네임옥션 2024 개발 일지
+# 뉴네임옥션 2024 개발일지
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 메인 페이지 레이아웃 및 기능 설명
 
-## Available Scripts
+### 1. 메인 페이지 레이아웃
 
-In the project directory, you can run:
+- **검색바**: 사용자가 검색어를 입력할 수 있는 필드입니다.
+- **초기화 버튼**: 모든 검색,필터,페이지 등을 기존의 상태로 초기화합니다
 
-### `npm start`
+### 2. 글자 수 필터링
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **체크박스**: 다음 글자 수의 단어를 필터링할 수 있습니다:
+    - 2 글자 단어
+    - 3 글자 단어
+    - 4 글자 단어
+    - 5 글자 단어
+    - 6 글자 단어
+- 체크박스를 선택하여 결과를 필터링하며, 필터링 후 결과가 즉시 업데이트됩니다.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 3. 정렬 기능
 
-### `npm test`
+- **드롭다운 메뉴**: 다음 정렬 기준 중에서 선택할 수 있습니다:
+    - **글씨 개수 순** : 글씨 개수에 따라 정렬합니다.
+    - **많이 검색한 순**: 검색 횟수에 따라 정렬합니다.
+    - **등록 날짜 순**: 최신 등록 날짜부터 정렬합니다.
+- 선택된 정렬 기준에 따라 결과가 정렬됩니다.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 4. 페이징 처리
 
-### `npm run build`
+- 검색 결과가 15개를 초과하면 페이지별로 결과를 나누어 표시합니다.
+- 페이지 네비게이션을 통해 사용자가 여러 페이지를 탐색할 수 있습니다.
+- 한 페이지에 표시할 결과의 수를 조절할 수 있습니다:
+    - 15개씩 보기
+    - 30개씩 보기
+    - 50개씩 보기
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 5. 검색 기능
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **단어 검색**: 입력한 단어를 포함하는 모든 결과를 검색합니다.
+- **초성 검색**: 예를 들어, 검색어 `ㄱㅂ`을 입력하면 `근본`, `고백`, `간부` 등 초성에 맞는 단어를 검색할 수 있는 기능입니다.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 6. 전체 보기
 
-### `npm run eject`
+- 초기 데이터로 돌아갑니다.
+- 검색된 텍스트 폼은 초기화됩니다.
+- 설정된 체크박스(2글자, 3글자, 4글자 등)는 초기화됩니다.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 개발 기간
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **2024-08-24~2024-08-28**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 개발 내역
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- 2024-08-24
+    - 프로젝트 생성
+    - 테일윈드 css, papaparse 라이브러리 설치 및 학습
+    - papaparse 를 이용한 csv 데이터를 텍스트로 파싱
+    - 기본 틀 작성 (테이블,제목,검색바 등등)
+- 2024-08-25
+    - 체크박스 컴포넌트 생성
+    - 검색 목록 페이징 처리
+    - 검색바,버튼,체크박스 작성
+    - css작업
+- 2024-08-27
+    - 검색 + 글자수필터링 오류나는거 해결
+    - n 개씩 보기 드롭다운  구현
+- 2024-08-28
+    - 검색결과 정렬 기능 구현
+    - css 작업 마무리 + 반응형 웹
+- 2024-08-29 (예정) ~
+    - 작성한 코드들 복습 후 노션에 나중에 재사용하거나 자주 쓰이는부분은 정리하기
 
-## Learn More
+### 추가할 내용이나 이후에 해야할 일
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [x]  검색 알고리즘 작성
+- [x]  초성 검색 알고리즘 작성
+- [x]  전체보기 시 검색 + 글자 수 체크 박스 초기화
+- [x]  정렬 드롭다운 추가 (캐릭터이름순 ,이름생성시도순,경매시작일순)
+- [x]  반응형 웹 추가
