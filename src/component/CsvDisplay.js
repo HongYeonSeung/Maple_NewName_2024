@@ -313,7 +313,7 @@ const CsvDisplay = () => {
     }
     setCurrentPage(1); // 현재 페이지를 첫 페이지로 이동
     setFiltertionsString(filterItemoptions[0]);
-  }, [selectedItems, subData]); // selectedItems과 subData가 변경될 때마다 실행
+  }, [selectedItems, subData,filterItemoptions]); // selectedItems과 subData가 변경될 때마다 실행
 
   // 렌더링
   return (
