@@ -232,6 +232,7 @@ const CsvDisplay = () => {
     if (text === "") {
       // 검색어가 비어있을 때는 전체 데이터를 표시합니다.
       setSearchData(data);
+      setSubData(data);
     } else {
       const searchText = text;
       const isHangulSearch = isHangul(searchText);
@@ -240,18 +241,18 @@ const CsvDisplay = () => {
 
       if (isHangulSearch) {
         // 올바른 한글 검색
-        filtered = data.filter((item) =>
-          Object.values(item).some((value) =>
-            value.toString().includes(searchText)
-          )
+        filtered = data.filter(
+          (item) =>
+            item["캐릭터 이름"].toString().includes(searchText)
         );
+
         filtered.sort();
+        console.log(filtered);
       } else {
         // 초성 검색
-        filtered = data.filter((item) =>
-          Object.values(item).some((value) =>
-            extractInitials(value.toString()).includes(searchText)
-          )
+        filtered = data.filter(
+          (item) =>
+            extractInitials(item["캐릭터 이름"].toString()).includes(searchText)
         );
         filtered.sort();
       }
@@ -260,31 +261,7 @@ const CsvDisplay = () => {
     }
   }, [text, data]);
 
-  // 체크박스 useEffect
-  // useEffect(() => {
-  //   if (selectedItems.length === 0) {
-  //     setSearchData(subData); // 기존 검색 데이터로 돌려놓기
-  //   }
-  //   // else if (selectedItems[0] === options[5]) { 7글자 이상 }
-  //   else {
-  //     // 선택된 글자 길이 추출
-  //     const selectedLengths = selectedItems.map((item) =>
-  //       parseInt(item.replace("글자", ""), 10)
-  //     );
-
-  //     // 길이와 일치하는 데이터 필터링
-  //     const filtered = subData.filter((row) => {
-  //       // '캐릭터 이름' 필드의 값을 기준으로 필터링
-  //       const value = row["캐릭터 이름"]; // '캐릭터 이름' 필드의 값을 가져옴
-  //       return (
-  //         typeof value === "string" && selectedLengths.includes(value.length)
-  //       );
-  //     });
-  //     setSearchData(filtered);
-  //   }
-  //   setCurrentPage(1); // 현재 페이지를 첫 페이지로 이동
-  // }, [selectedItems, data, subData]); // data와 selectedItems이 변경될 때마다 실행
-
+  //체크박스
   useEffect(() => {
     if (selectedItems.length === 0) {
       setSearchData(subData); // 기존 검색 데이터로 돌려놓기
@@ -317,7 +294,7 @@ const CsvDisplay = () => {
     }
     setCurrentPage(1); // 현재 페이지를 첫 페이지로 이동
     setFiltertionsString(filterItemoptions[0]);
-  }, [selectedItems, subData, filterItemoptions]); // selectedItems과 subData가 변경될 때마다 실행
+  }, [selectedItems, subData, filterItemoptions, text]); // selectedItems과 subData가 변경될 때마다 실행
 
   // 렌더링
   return (
