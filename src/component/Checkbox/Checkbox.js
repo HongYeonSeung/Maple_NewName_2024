@@ -18,9 +18,9 @@ function Checkbox({ options, checkedItems, onChange }) {
   }, [checkedItems, onChange]);
 
   return (
-    <div className="flex flex-wrap gap-2 md:gap-4">
+    <div className="flex flex-wrap gap-4 md:gap-6 mx-5">
       {options.map((option) => (
-        <label key={option} className="flex items-center space-x-1 md:space-x-6">
+        <label key={option} className="flex items-center space-x-5 md:space-x-3">
           <input
             type="checkbox"
             name={option}
@@ -28,7 +28,7 @@ function Checkbox({ options, checkedItems, onChange }) {
             onChange={handleChange}
             className="form-checkbox h-4 w-4"
           />
-          <span className="text-xs md:text-xl">{option}</span>
+          <span className="text-xs md:text-base">{option}</span>
         </label>
       ))}
     </div>

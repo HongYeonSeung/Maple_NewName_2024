@@ -25,7 +25,7 @@ function Dropdown({ label, children }) {
       onMouseLeave={closeDropdown} // 마우스 벗어날 때 닫기
     >
       <button
-        className="dropdown-toggle w-full bg-orange-400 text-white text-xs md:text-xl py-2 px-4 rounded hover:bg-orange-600"
+        className="dropdown-toggle w-full bg-orange-400 text-white text-xs md:text-sm py-2 px-2 rounded hover:bg-orange-600"
         onClick={openDropdown} // 버튼 클릭 시 열기
       >
         {label}

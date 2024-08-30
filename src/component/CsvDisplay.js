@@ -6,13 +6,17 @@ import Dropdown from "./Dropdown/Dropdown";
 import DropdownItem from "./Dropdown/DropdownItem";
 
 const CsvDisplay = () => {
+  // const [originalData, setOriginalData] = useState([]); // CSV 원본 데이터
 
   const [data, setData] = useState([]); // CSV 데이터를 저장할 상태 변수
-  const isMobile = window.matchMedia("(max-width: 768px)").matches; // 모바일로 접속 감지
+  const [searchData, setSearchData] = useState([]); // 검색한 데이터 실제 렌더링하는 데이터
+  const [subData, setSubData] = useState([]); // 검색한 서브 데이터
 
-  const options = ["2글자", "3글자", "4글자", "5글자", "6글자"]; // 체크박스 옵션
+  const isMobile = window.matchMedia("(max-width: 768px)").matches; // 모바일로 접속 감지
+  const options = ["2글자", "3글자", "4글자", "5글자", "6글자", "7글자 이상"]; // 체크박스 옵션
   const choiceItemoptions = ["15개씩 보기", "30개씩 보기", "50개씩 보기"];
   const filterItemoptions = [
+    "기본 정렬",
     "글자 적은 순",
     "글자 많은 순",
     "생성 시도 적은 순",
@@ -21,10 +25,8 @@ const CsvDisplay = () => {
     "경매 시작일 느린 순",
   ];
 
-  const [searchData, setSearchData] = useState([]); // 검색한 데이터 실제 렌더링하는 데이터
-  const [subData, setSubData] = useState([]); // 검색한 서브 데이터
-
   const [text, setText] = useState(""); // 검색 텍스트 상태 관리
+
   const [checkedItems, setCheckedItems] = useState({}); //체크박스 해제용
   const [selectedItems, setSelectedItems] = useState([]); // 체크박스 어떤 아이템인지 확인
 
@@ -58,43 +60,58 @@ const CsvDisplay = () => {
   const handleFilterItemClick = (item, idx) => {
     setFiltertionsString(item);
     //"글씨 적은순","글씨 많은순","생성 시도 적은순","생성 시도 많은순","경매 시작일 빠른순","경매 시작일 느린순" 순서입니다
+
     // 정렬을 위해 searchData의 복사본 생성
     const sortedData = [...searchData];
 
-    //글씨 적은순
+    //기본 정렬
     if (idx === 0) {
+      sortedData.sort((a, b) =>
+        a["캐릭터 이름"].localeCompare(b["캐릭터 이름"])
+      );
+    }
+    //글씨 적은순
+    else if (idx === 1) {
       sortedData.sort(
         (a, b) => a["캐릭터 이름"].length - b["캐릭터 이름"].length
       );
     }
 
     //글씨 많은순
-    else if (idx === 1) {
+    else if (idx === 2) {
       sortedData.sort(
         (a, b) => b["캐릭터 이름"].length - a["캐릭터 이름"].length
       );
     }
 
-    // 기타 정렬 옵션
-    else if (idx === 2) {
+    // 생성 시도 적은순
+    else if (idx === 3) {
       sortedData.sort(
         (a, b) => a["이름 생성 시도 횟수"] - b["이름 생성 시도 횟수"]
       );
-    } else if (idx === 3) {
+    }
+
+    // 생성 시도 많은순
+    else if (idx === 4) {
       sortedData.sort(
         (a, b) => b["이름 생성 시도 횟수"] - a["이름 생성 시도 횟수"]
       );
-    } else if (idx === 4) {
+    }
+    // 경매 시작일 빠른순
+    else if (idx === 5) {
       sortedData.sort(
         (a, b) => new Date(a["경매 시작일"]) - new Date(b["경매 시작일"])
       );
-    } else if (idx === 5) {
+    }
+    // 경매 시작일 느린순
+    else if (idx === 6) {
       sortedData.sort(
         (a, b) => new Date(b["경매 시작일"]) - new Date(a["경매 시작일"])
       );
     }
 
     setSearchData(sortedData);
+    setCurrentPage(1); // 현재 페이지를 첫 페이지로 이동
   };
 
   // 페이징 계산
@@ -191,9 +208,15 @@ const CsvDisplay = () => {
           header: true, // 첫 줄을 헤더로 사용합니다.
           skipEmptyLines: true, // 빈 줄은 무시합니다.
           complete: (results) => {
-            setData(results.data); // 파싱된 데이터를 상태에 저장합니다.
-            setSearchData(results.data);
-            setSubData(results.data);
+            const sortedOriginalData = [...results.data];
+
+            sortedOriginalData.sort((a, b) =>
+              a["캐릭터 이름"].localeCompare(b["캐릭터 이름"])
+            );
+            setData(sortedOriginalData);
+            setSubData(sortedOriginalData);
+
+            // 캐릭터 이름 기준으로 정렬된 데이터 저장
           },
         });
       })
@@ -218,6 +241,7 @@ const CsvDisplay = () => {
             value.toString().includes(searchText)
           )
         );
+        filtered.sort();
       } else {
         // 초성 검색
         filtered = data.filter((item) =>
@@ -225,6 +249,7 @@ const CsvDisplay = () => {
             extractInitials(value.toString()).includes(searchText)
           )
         );
+        filtered.sort();
       }
       setSearchData(filtered);
       setSubData(filtered);
@@ -232,35 +257,70 @@ const CsvDisplay = () => {
   }, [text, data]);
 
   // 체크박스 useEffect
+  // useEffect(() => {
+  //   if (selectedItems.length === 0) {
+  //     setSearchData(subData); // 기존 검색 데이터로 돌려놓기
+  //   }
+  //   // else if (selectedItems[0] === options[5]) { 7글자 이상 }
+  //   else {
+  //     // 선택된 글자 길이 추출
+  //     const selectedLengths = selectedItems.map((item) =>
+  //       parseInt(item.replace("글자", ""), 10)
+  //     );
+
+  //     // 길이와 일치하는 데이터 필터링
+  //     const filtered = subData.filter((row) => {
+  //       // '캐릭터 이름' 필드의 값을 기준으로 필터링
+  //       const value = row["캐릭터 이름"]; // '캐릭터 이름' 필드의 값을 가져옴
+  //       return (
+  //         typeof value === "string" && selectedLengths.includes(value.length)
+  //       );
+  //     });
+  //     setSearchData(filtered);
+  //   }
+  //   setCurrentPage(1); // 현재 페이지를 첫 페이지로 이동
+  // }, [selectedItems, data, subData]); // data와 selectedItems이 변경될 때마다 실행
+
   useEffect(() => {
     if (selectedItems.length === 0) {
-      setCurrentPage(1); // 현재 페이지를 첫 페이지로 이동
       setSearchData(subData); // 기존 검색 데이터로 돌려놓기
     } else {
       // 선택된 글자 길이 추출
-      const selectedLengths = selectedItems.map((item) =>
-        parseInt(item.replace("글자", ""), 10)
-      );
+      const selectedLengths = selectedItems
+        .filter((item) => item !== "7글자 이상") // "7글자 이상" 제외
+        .map((item) => parseInt(item.replace("글자", ""), 10));
 
-      // 길이와 일치하는 데이터 필터링
+      // 필터링 데이터
       const filtered = subData.filter((row) => {
         // '캐릭터 이름' 필드의 값을 기준으로 필터링
         const value = row["캐릭터 이름"]; // '캐릭터 이름' 필드의 값을 가져옴
-        return (
-          typeof value === "string" && selectedLengths.includes(value.length)
-        );
+        if (typeof value === "string") {
+          const length = value.length;
+
+          // 7글자 이상 체크박스가 선택된 경우
+          const hasSevenOrMore = selectedItems.includes("7글자 이상");
+
+          // 7글자 이상 또는 길이가 선택된 길이 중 하나일 경우
+          return (
+            (length >= 7 && hasSevenOrMore) || // 7글자 이상일 경우
+            selectedLengths.includes(length) // 선택된 길이와 일치할 경우
+          );
+        }
+        return false;
       });
+
       setSearchData(filtered);
-      setCurrentPage(1); // 현재 페이지를 첫 페이지로 이동
     }
-  }, [selectedItems, data, subData]); // data와 selectedItems이 변경될 때마다 실행
+    setCurrentPage(1); // 현재 페이지를 첫 페이지로 이동
+    setFiltertionsString(filterItemoptions[0]);
+  }, [selectedItems, subData]); // selectedItems과 subData가 변경될 때마다 실행
 
   // 렌더링
   return (
     <div className="flex items-center justify-center min-h-screen bg-orange-100 p-6">
-      <div className="bg-white p-8 border rounded-lg shadow-lg w-full max-w-6xl min-h-screen">
+      <div className="bg-white py-2 px-6 md:px-12 border rounded-lg shadow-lg w-full max-w-5xl min-h-screen">
         {/* 테이블 제목 */}
-        <h1 className="text-2xl md:text-6xl font-bold mb-10 text-orange-600">
+        <h1 className="text-2xl md:text-6xl font-bold my-6 text-orange-600">
           뉴네임 옥션 닉네임찾기
         </h1>
         <div className="mb-4 flex gap-4">
@@ -282,7 +342,7 @@ const CsvDisplay = () => {
 
         <div className="flex flex-col md:flex-row md:justify-between md:items-center my-4">
           {/* 체크박스 */}
-          <div className="flex md:flex-[6] md:flex md:justify-center md:items-center justify-center items-center my-4">
+          <div className="flex md:flex-[6] md:flex md:justify-center md:items-center justify-center items-center my-2">
             <Checkbox
               options={options}
               checkedItems={checkedItems}
@@ -291,9 +351,9 @@ const CsvDisplay = () => {
           </div>
 
           {/* 몇개씩 보기 드롭다운 */}
-          <div className="flex md:flex-[5]">
-            <div className="flex-[1] md:flex-[2] mx-2 my-2">
-              <Dropdown label={listoptionsString + (!isMobile?" ⮟":"")}>
+          <div className="flex md:flex-[3] ">
+            <div className="flex-[1] md:flex-[2] mx-1 my-4">
+              <Dropdown label={listoptionsString + (!isMobile ? " ⮟" : "")}>
                 {choiceItemoptions.map((item, idx) => (
                   <DropdownItem
                     key={idx}
@@ -306,8 +366,8 @@ const CsvDisplay = () => {
             </div>
 
             {/* 정렬 필터링 드롭다운 */}
-            <div className="flex-[1] md:flex-[3] mx-2 my-2">
-              <Dropdown label={filteroptionsString + (!isMobile?" ⮟":"")}>
+            <div className="flex-[1] md:flex-[3] mx-1 my-4 ">
+              <Dropdown label={filteroptionsString + (!isMobile ? " ⮟" : "")}>
                 {filterItemoptions.map((item, idx) => (
                   <DropdownItem
                     key={idx}
@@ -337,7 +397,7 @@ const CsvDisplay = () => {
                   ))}
               </tr>
             </thead>
-            <tbody className="text-sm md:text-lg">
+            <tbody className="text-xs md:text-base">
               {currentItems.map((row, rowIndex) => (
                 <tr key={rowIndex} className="even:bg-orange-50">
                   {Object.values(row).map((value, cellIndex) => (
@@ -360,7 +420,7 @@ const CsvDisplay = () => {
             currentPage={currentPage}
           />
         </div>
-        <p className="mt-16 text-gray-500">
+        <p className="mt-16 mb-2 text-gray-500 text-xs">
           메이플 인벤 '음침개발자' 님 csv 파일 제공 감사합니다.
         </p>
       </div>
