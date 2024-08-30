@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import Papa from "papaparse";
 import Checkbox from "./Checkbox/Checkbox";
 import Pagination from "./Pagination/pagination";
@@ -15,15 +15,19 @@ const CsvDisplay = () => {
   const isMobile = window.matchMedia("(max-width: 768px)").matches; // 모바일로 접속 감지
   const options = ["2글자", "3글자", "4글자", "5글자", "6글자", "7글자 이상"]; // 체크박스 옵션
   const choiceItemoptions = ["15개씩 보기", "30개씩 보기", "50개씩 보기"];
-  const filterItemoptions = [
-    "기본 정렬",
-    "글자 적은 순",
-    "글자 많은 순",
-    "생성 시도 적은 순",
-    "생성 시도 많은 순",
-    "경매 시작일 빠른 순",
-    "경매 시작일 느린 순",
-  ];
+
+  const filterItemoptions = useMemo(
+    () => [
+      "기본 정렬",
+      "글자 적은 순",
+      "글자 많은 순",
+      "생성 시도 적은 순",
+      "생성 시도 많은 순",
+      "경매 시작일 빠른 순",
+      "경매 시작일 느린 순",
+    ],
+    []
+  );
 
   const [text, setText] = useState(""); // 검색 텍스트 상태 관리
 
@@ -313,7 +317,7 @@ const CsvDisplay = () => {
     }
     setCurrentPage(1); // 현재 페이지를 첫 페이지로 이동
     setFiltertionsString(filterItemoptions[0]);
-  }, [selectedItems, subData,filterItemoptions]); // selectedItems과 subData가 변경될 때마다 실행
+  }, [selectedItems, subData, filterItemoptions]); // selectedItems과 subData가 변경될 때마다 실행
 
   // 렌더링
   return (
